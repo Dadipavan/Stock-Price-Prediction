@@ -38,8 +38,8 @@ A sophisticated machine learning application that uses LSTM neural networks to p
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/yourusername/stock-prediction-app.git
-cd stock-prediction-app
+git clone https://github.com/Dadipavan/Stock-Price-Prediction.git
+cd Stock-Price-Prediction
 ```
 
 ### Step 2: Create Virtual Environment
@@ -268,20 +268,12 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ### Contact Information
 - **Email**: your.email@example.com
-- **GitHub**: [@yourusername](https://github.com/yourusername)
-- **LinkedIn**: [Your Profile](https://linkedin.com/in/yourprofile)
+- **GitHub**: [@yourusername](https://github.com/Dadipavan)
+- **LinkedIn**: [Your Profile](https://www.linkedin.com/in/valavala-dadi-naga-siva-sai-pavan-b6a1a728b/)
 
 ## 🔮 Future Enhancements
 
 ### Planned Features
-- [ ] **Multiple Timeframe Predictions** (1 week, 1 month)
-- [ ] **Portfolio Analysis** (multiple stocks)
-- [ ] **Real-time Updates** (WebSocket integration)
-- [ ] **Advanced Models** (Transformer, GRU networks)
-- [ ] **News Sentiment Analysis** (NLP integration)
-- [ ] **Options Pricing** (Black-Scholes model)
-- [ ] **Backtesting Framework** (Strategy validation)
-- [ ] **Mobile App** (React Native)
 - [ ] **Database Integration** (PostgreSQL)
 - [ ] **User Authentication** (Login system)
 
@@ -301,5 +293,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 **⭐ If you found this project helpful, please give it a star on GitHub!**
 
 **💡 Have suggestions or found a bug? Please open an issue or submit a pull request.**
+
 
 **🚀 Ready to predict the future of stocks? Let's get started!**
