@@ -267,9 +267,9 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - **Community**: Join discussions in GitHub Discussions
 
 ### Contact Information
-- **Email**: your.email@example.com
-- **GitHub**: [@yourusername](https://github.com/Dadipavan)
-- **LinkedIn**: [Your Profile](https://www.linkedin.com/in/valavala-dadi-naga-siva-sai-pavan-b6a1a728b/)
+- **Email**: dadisaipavan1514@gmail.com
+- **GitHub**: [@Dadipavan](https://github.com/Dadipavan)
+- **LinkedIn**: [Valavala Sai Pavan](https://www.linkedin.com/in/valavala-dadi-naga-siva-sai-pavan-b6a1a728b/)
 
 ## 🔮 Future Enhancements
 
@@ -296,3 +296,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 
 **🚀 Ready to predict the future of stocks? Let's get started!**
+
