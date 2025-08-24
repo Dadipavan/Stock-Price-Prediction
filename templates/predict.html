@@ -1,0 +1,491 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="prediction-results">
+    {% if error %}
+    <!-- Error Display -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-danger shadow-lg">
+                <div class="card-body text-center p-5">
+                    <i class="fas fa-exclamation-triangle text-danger fa-4x mb-4"></i>
+                    <h3 class="text-danger mb-3">Prediction Error</h3>
+                    <p class="lead mb-4">{{ error }}</p>
+                    <a href="/" class="btn btn-primary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i>Try Another Stock
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary text-white shadow-lg">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="mb-2" style="color:#1e3a8a">
+                                <i class="fas fa-chart-line me-3" ></i>{{ ticker }}
+                            </h1>
+                            <p style="color:#1e3a8a" >AI-Powered Stock Analysis & Prediction</p>
+                        </div>
+                        <div class="text-end">
+                            <a href="/" class="btn btn-light btn-lg">
+                                <i class="fas fa-search me-2"></i>New Prediction
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Key Metrics Section -->
+    <div class="metrics-section mb-5">
+        <div class="row g-4">
+            <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
+                <div class="card metric-card-enhanced current-price h-100">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                        <div class="metric-icon-enhanced mb-3">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <h6 class="metric-label text-uppercase mb-2">Current Price</h6>
+                        <h2 class="metric-value mb-2">${{ "%.2f"|format(stats.current_price) }}</h2>
+                        <div class="metric-trend">
+                            <span class="trend-indicator current">
+                                <i class="fas fa-circle"></i> Live Price
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
+                <div class="card metric-card-enhanced predicted-price h-100">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                        <div class="metric-icon-enhanced mb-3">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h6 class="metric-label text-uppercase mb-2">AI Predicted Price</h6>
+                        <h2 class="metric-value mb-2">${{ "%.2f"|format(stats.predicted_price) }}</h2>
+                        <div class="metric-trend">
+                            <span class="change-badge-enhanced {{ 'positive' if stats.price_change > 0 else 'negative' if stats.price_change < 0 else 'neutral' }}">
+                                <i class="fas fa-{{ 'arrow-up' if stats.price_change > 0 else 'arrow-down' if stats.price_change < 0 else 'minus' }}"></i>
+                                {{ "%.2f"|format(stats.price_change_percent) }}%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
+                <div class="card metric-card-enhanced rsi-card h-100">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                        <div class="metric-icon-enhanced mb-3">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h6 class="metric-label text-uppercase mb-2">RSI Indicator</h6>
+                        <h2 class="metric-value mb-2">{{ "%.1f"|format(stats.rsi) }}</h2>
+                        <div class="metric-trend">
+                            <span class="rsi-status {{ 'overbought' if stats.rsi > 70 else 'oversold' if stats.rsi < 30 else 'neutral' }}">
+                                {% if stats.rsi > 70 %}
+                                    <i class="fas fa-exclamation-triangle"></i> Overbought
+                                {% elif stats.rsi < 30 %}
+                                    <i class="fas fa-exclamation-triangle"></i> Oversold
+                                {% else %}
+                                    <i class="fas fa-check-circle"></i> Neutral
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
+                <div class="card metric-card-enhanced volume-card h-100">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                        <div class="metric-icon-enhanced mb-3">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h6 class="metric-label text-uppercase mb-2">Trading Volume</h6>
+                        <h2 class="metric-value mb-2">{{ "{:,.0f}".format(stats.volume/1000000) }}M</h2>
+                        <div class="metric-trend">
+                            <span class="volume-info">
+                                <i class="fas fa-info-circle"></i> {{ "{:,}".format(stats.volume) }} shares
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Model Performance Section -->
+    <div class="performance-section mb-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card performance-card-enhanced shadow-lg">
+                    <div class="card-header performance-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="header-icon">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+                                <div class="header-content">
+                                    <h5 class="header-title mb-0">AI Model Performance Analytics</h5>
+                                    <p class="header-subtitle mb-0">Real-time accuracy metrics and validation scores</p>
+                                </div>
+                            </div>
+                            <div class="performance-badge">
+                                <span class="badge bg-success">Active Model</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="performance-grid">
+                            <div class="performance-item">
+                                <div class="performance-content">
+                                    <div class="performance-icon training">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <div class="performance-details">
+                                        <h6 class="performance-label">Training RMSE</h6>
+                                        <h3 class="performance-value">${{ "%.2f"|format(stats.train_rmse) }}</h3>
+                                        <div class="performance-description">
+                                            <span class="accuracy-indicator good">
+                                                <i class="fas fa-check-circle"></i> Good Fit
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="performance-item">
+                                <div class="performance-content">
+                                    <div class="performance-icon testing">
+                                        <i class="fas fa-flask"></i>
+                                    </div>
+                                    <div class="performance-details">
+                                        <h6 class="performance-label">Test RMSE</h6>
+                                        <h3 class="performance-value">${{ "%.2f"|format(stats.test_rmse) }}</h3>
+                                        <div class="performance-description">
+                                            <span class="accuracy-indicator {{ 'excellent' if stats.test_rmse < 5 else 'good' if stats.test_rmse < 10 else 'fair' }}">
+                                                <i class="fas fa-{{ 'star' if stats.test_rmse < 5 else 'check-circle' if stats.test_rmse < 10 else 'info-circle' }}"></i>
+                                                {{ 'Excellent' if stats.test_rmse < 5 else 'Good' if stats.test_rmse < 10 else 'Fair' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="performance-item">
+                                <div class="performance-content">
+                                    <div class="performance-icon training">
+                                        <i class="fas fa-target"></i>
+                                    </div>
+                                    <div class="performance-details">
+                                        <h6 class="performance-label">Training MAE</h6>
+                                        <h3 class="performance-value">${{ "%.2f"|format(stats.train_mae) }}</h3>
+                                        <div class="performance-description">
+                                            <span class="accuracy-indicator good">
+                                                <i class="fas fa-bullseye"></i> Precise
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="performance-item">
+                                <div class="performance-content">
+                                    <div class="performance-icon testing">
+                                        <i class="fas fa-crosshairs"></i>
+                                    </div>
+                                    <div class="performance-details">
+                                        <h6 class="performance-label">Test MAE</h6>
+                                        <h3 class="performance-value">${{ "%.2f"|format(stats.test_mae) }}</h3>
+                                        <div class="performance-description">
+                                            <span class="accuracy-indicator {{ 'excellent' if stats.test_mae < 3 else 'good' if stats.test_mae < 6 else 'fair' }}">
+                                                <i class="fas fa-{{ 'award' if stats.test_mae < 3 else 'medal' if stats.test_mae < 6 else 'certificate' }}"></i>
+                                                {{ 'Excellent' if stats.test_mae < 3 else 'Good' if stats.test_mae < 6 else 'Fair' }} Accuracy
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+        <!-- Price Chart -->
+        <div class="col-12 mb-4">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Price Analysis with Moving Averages
+                    </h5>
+                </div>
+                <div class="card-body p-3">
+                    <img src="data:image/png;base64,{{ charts.price }}" 
+                         class="img-fluid chart-image" 
+                         alt="Price Chart">
+                </div>
+            </div>
+        </div>
+
+        <!-- Prediction Chart -->
+        {% if charts.prediction %}
+        <div class="col-12 mb-4">
+            <div class="card chart-card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-eye me-2"></i>Actual vs Predicted Prices
+                    </h5>
+                </div>
+                <div class="card-body p-3">
+                    <img src="data:image/png;base64,{{ charts.prediction }}" 
+                         class="img-fluid chart-image" 
+                         alt="Prediction Chart">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- RSI Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card chart-card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tachometer-alt me-2"></i>RSI Indicator
+                    </h5>
+                </div>
+                <div class="card-body p-3">
+                    <img src="data:image/png;base64,{{ charts.rsi }}" 
+                         class="img-fluid chart-image" 
+                         alt="RSI Chart">
+                </div>
+            </div>
+        </div>
+
+        <!-- Volume Chart -->
+        {% if charts.volume %}
+        <div class="col-md-6 mb-4">
+            <div class="card chart-card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Trading Volume
+                    </h5>
+                </div>
+                <div class="card-body p-3">
+                    <img src="data:image/png;base64,{{ charts.volume }}" 
+                         class="img-fluid chart-image" 
+                         alt="Volume Chart">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Technical Indicators -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>Technical Indicators
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="indicator">
+                                <h6>20-Day Moving Average</h6>
+                                <h4>${{ "%.2f"|format(stats.ma_20) }}</h4>
+                                <small class="text-muted">Short-term trend</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="indicator">
+                                <h6>50-Day Moving Average</h6>
+                                <h4>${{ "%.2f"|format(stats.ma_50) }}</h4>
+                                <small class="text-muted">Medium-term trend</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="indicator">
+                                <h6>Volatility (20-day)</h6>
+                                <h4>{{ "%.2f"|format(stats.volatility) }}%</h4>
+                                <small class="text-muted">Price fluctuation</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Price History -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Last 10 Days Price History
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                    <th>Daily Change</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for day in last_10_days %}
+                                <tr>
+                                    <td>{{ day.date }}</td>
+                                    <td>${{ "%.2f"|format(day.price) }}</td>
+                                    <td class="{{ 'text-success' if day.change > 0 else 'text-danger' if day.change < 0 else 'text-muted' }}">
+                                        {% if day.change != 0 %}
+                                            {{ "%.2f"|format(day.change) }}%
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if day.change > 0 %}
+                                            <i class="fas fa-arrow-up text-success"></i>
+                                        {% elif day.change < 0 %}
+                                            <i class="fas fa-arrow-down text-danger"></i>
+                                        {% else %}
+                                            <i class="fas fa-minus text-muted"></i>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investment Recommendation -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card recommendation-card">
+                <div class="card-body text-center p-4">
+                    <h4 class="mb-3">AI Recommendation</h4>
+                    {% set recommendation = 'BUY' if stats.price_change_percent > 2 else 'SELL' if stats.price_change_percent < -2 else 'HOLD' %}
+                    <div class="recommendation-badge {{ recommendation.lower() }}">
+                        <i class="fas fa-{{ 'thumbs-up' if recommendation == 'BUY' else 'thumbs-down' if recommendation == 'SELL' else 'hand-paper' }}"></i>
+                        {{ recommendation }}
+                    </div>
+                    <p class="mt-3 text-muted">
+                        Based on technical analysis and AI prediction: 
+                        {% if recommendation == 'BUY' %}
+                            Strong upward trend predicted
+                        {% elif recommendation == 'SELL' %}
+                            Downward trend expected
+                        {% else %}
+                            Sideways movement expected
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate metric cards on load
+    const metricCards = document.querySelectorAll('.metric-card');
+    metricCards.forEach((card, index) => {
+        setTimeout(() => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        }, index * 100);
+    });
+
+    // Add hover effects to charts
+    const chartImages = document.querySelectorAll('.chart-image');
+    chartImages.forEach(img => {
+        img.addEventListener('click', function() {
+            // Create modal for full-size chart view
+            const modal = document.createElement('div');
+            modal.className = 'chart-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <img src="${this.src}" style="width: 100%; height: auto;">
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            modal.querySelector('.close').onclick = () => {
+                document.body.removeChild(modal);
+            };
+            
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            };
+        });
+    });
+});
+</script>
+
+<style>
+.chart-modal {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+}
+
+.chart-modal .modal-content {
+    margin: 2% auto;
+    width: 90%;
+    max-width: 1200px;
+    position: relative;
+}
+
+.chart-modal .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+{% endblock %}

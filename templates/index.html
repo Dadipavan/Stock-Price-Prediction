@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="row align-items-center min-vh-100">
+        <div class="col-lg-6">
+            <div class="hero-content">
+                <h1 class="display-4 fw-bold mb-4">
+                    Predict Stock Prices with 
+                    <span class="text-gradient">AI Power</span>
+                </h1>
+                <p class="lead mb-4">
+                    Advanced LSTM neural networks analyze historical data to predict future stock prices. 
+                    Get insights with technical indicators and comprehensive market analysis.
+                </p>
+                <div class="features mb-4">
+                    <div class="feature-item">
+                        <i class="fas fa-brain text-primary me-2"></i>
+                        <span>Deep Learning LSTM Models</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-area text-success me-2"></i>
+                        <span>Technical Analysis</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-clock text-warning me-2"></i>
+                        <span>Real-time Data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="prediction-card">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-center mb-4">
+                            <i class="fas fa-search me-2 text-primary"></i>
+                            Enter Stock Symbol
+                        </h3>
+                        
+                        <form method="POST" action="/predict" class="prediction-form">
+                            <div class="mb-4">
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-primary text-white">
+                                        <i class="fas fa-chart-line"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control form-control-lg" 
+                                           name="ticker"
+                                           id="tickerInput"
+                                           placeholder="Enter ticker (e.g., AAPL, GOOGL, TSLA)"
+                                           pattern="[A-Za-z.]+"
+                                           maxlength="6"
+                                           required
+                                           autocomplete="off">
+                                </div>
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Enter any valid stock ticker symbol from major exchanges
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-4">
+                                <i class="fas fa-magic me-2"></i>
+                                Predict Stock Price
+                            </button>
+                        </form>
+
+                        <!-- Popular Stocks -->
+                        <div class="popular-stocks">
+                            <h6 class="mb-3 text-muted">Popular Stocks:</h6>
+                            <div class="row g-2">
+                                <div class="col-6 col-md-4">
+                                    <button class="btn btn-outline-primary btn-sm w-100 stock-btn" data-ticker="AAPL">
+                                        <i class="fab fa-apple me-1"></i>AAPL
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <button class="btn btn-outline-primary btn-sm w-100 stock-btn" data-ticker="GOOGL">
+                                        <i class="fab fa-google me-1"></i>GOOGL
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <button class="btn btn-outline-primary btn-sm w-100 stock-btn" data-ticker="MSFT">
+                                        <i class="fab fa-microsoft me-1"></i>MSFT
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <button class="btn btn-outline-primary btn-sm w-100 stock-btn" data-ticker="TSLA">
+                                        <i class="fas fa-car me-1"></i>TSLA
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <button class="btn btn-outline-primary btn-sm w-100 stock-btn" data-ticker="AMZN">
+                                        <i class="fab fa-amazon me-1"></i>AMZN
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <button class="btn btn-outline-primary btn-sm w-100 stock-btn" data-ticker="NVDA">
+                                        <i class="fas fa-microchip me-1"></i>NVDA
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<section id="about" class="features-section py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+                <p class="lead text-muted">Our AI-powered system uses advanced machine learning techniques</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-download fa-3x text-primary"></i>
+                    </div>
+                    <h4>Data Collection</h4>
+                    <p class="text-muted">
+                        Real-time stock data from Yahoo Finance with 2+ years of historical prices
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-cogs fa-3x text-success"></i>
+                    </div>
+                    <h4>AI Processing</h4>
+                    <p class="text-muted">
+                        LSTM neural networks analyze patterns with technical indicators like RSI and moving averages
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-line fa-3x text-warning"></i>
+                    </div>
+                    <h4>Predictions</h4>
+                    <p class="text-muted">
+                        Accurate next-day price predictions with comprehensive analysis and visualizations
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Disclaimer -->
+<div class="disclaimer-section bg-light py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-warning mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Disclaimer:</strong> This tool is for educational and research purposes only. 
+                    Stock predictions are based on historical data and should not be considered as financial advice. 
+                    Always consult with financial advisors before making investment decisions.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tickerInput = document.getElementById('tickerInput');
+    const stockButtons = document.querySelectorAll('.stock-btn');
+    
+    // Handle popular stock buttons
+    stockButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const ticker = this.getAttribute('data-ticker');
+            tickerInput.value = ticker;
+            
+            // Add visual feedback
+            this.classList.add('active');
+            setTimeout(() => {
+                this.classList.remove('active');
+            }, 200);
+        });
+    });
+    
+    // Input validation and formatting
+    tickerInput.addEventListener('input', function() {
+        this.value = this.value.toUpperCase().replace(/[^A-Z.]/g, '');
+    });
+    
+    // Form validation
+    const form = document.querySelector('.prediction-form');
+    form.addEventListener('submit', function(e) {
+        const ticker = tickerInput.value.trim();
+        
+        if (!ticker) {
+            e.preventDefault();
+            tickerInput.classList.add('is-invalid');
+            return;
+        }
+        
+        if (ticker.length < 1 || ticker.length > 6) {
+            e.preventDefault();
+            tickerInput.classList.add('is-invalid');
+            return;
+        }
+        
+        tickerInput.classList.remove('is-invalid');
+    });
+    
+    // Remove invalid class on input
+    tickerInput.addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+});
+</script>
+{% endblock %}
